@@ -1,5 +1,5 @@
 /**
- * ZzFX Music Renderer v2.0.3 by Keith Clark and Frank Force
+ * ZzFX Music Renderer v2.1.0 by Keith Clark and Frank Force
  */
 
 /**
@@ -55,6 +55,8 @@ zzfxM = (instruments, patterns, sequence, BPM = 125) => {
   let hasMore = 1;
   let sampleCache = {};
   let beatLength = zzfxR / BPM * 60 >> 2;
+  let int;
+  let duration;
 
   // for each channel in order until there are no more
   for(; hasMore; channelIndex++) {
@@ -100,8 +102,8 @@ zzfxM = (instruments, patterns, sequence, BPM = 125) => {
           // Get decimal part without decimal error so protect binary
           // 8 bits (high bits) for duration
           // 7 bits (low bits for backwards compatibility) for attenuation.
-          const int = (note + '').split('.')[1]*1;
-          const duration = int >> 7;
+          int = (note + '').split('.')[1]*1;
+          duration = int >> 7;
           // set attenuation
           attenuation = parseFloat( '0.' + (int & 0x7F) );
           panning = patternChannel[1] || 0;
