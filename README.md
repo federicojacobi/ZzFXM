@@ -243,6 +243,21 @@ The attenuation component is used to control volume - here is an example of play
 ]
 ```
 
+In some cases you may want the note to keep playing or be sustained through multiple beats. This is not a straight forward calculation, but the "duration-attenuation-calculator" in the /tools directory makes it a breeze.
+
+Duration and attenuation are encoded in the decimal part of the note as a 15-bit number, where the high 8 bits represent the duration of the note, and the low 7 bits represent the attenuation. Even though 7 bits can go all the way to 127, attenuation must still be less 99.
+
+```js
+[
+  1,     // full volume, note lasts one beat.
+  1.2,   // 80% volume, note lasts one beat.
+  1.388, // 60% volume, note is sustained for 3 beats.
+  1.262, // 40% volume, note is sustained for 2 beats.
+  1.8    // 20% volume,
+  -1     // release (mute the note)
+]
+```
+
 
 ## `<sequence>` structure
 

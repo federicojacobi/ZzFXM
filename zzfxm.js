@@ -97,20 +97,28 @@ zzfxM = (instruments, patterns, sequence, BPM = 125) => {
 
         // set up for next note
         if (note) {
+          // Get decimal part without decimal error so protect binary
+          // 8 bits (high bits) for duration
+          // 7 bits (low bits for backwards compatibility) for attenuation.
+          const int = (note + '').split('.')[1]*1;
+          const duration = int >> 7;
           // set attenuation
-          attenuation = note % 1;
+          attenuation = parseFloat( '0.' + (int & 0x7F) );
           panning = patternChannel[1] || 0;
           if (note |= 0) {
             // get cached sample
             sampleBuffer = sampleCache[
               [
                 instrument = patternChannel[sampleOffset = 0] || 0,
-                note
+                note,
+                duration
               ]
-            ] = sampleCache[[instrument, note]] || (
+            ] = sampleCache[[instrument, note, duration]] || (
                 // add sample to cache
                 instrumentParameters = [...instruments[instrument]],
                 instrumentParameters[2] *= 2 ** ((note - 12) / 12),
+                // Use instrument-defined sustain if not specified
+                duration > 0 && (instrumentParameters[4] = BPM / 60 * duration ),
 
                 // allow negative values to stop notes
                 note > 0 ? zzfxG(...instrumentParameters) : []
