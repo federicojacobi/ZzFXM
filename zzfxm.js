@@ -99,9 +99,9 @@ zzfxM = (instruments, patterns, sequence, BPM = 125) => {
 
         // set up for next note
         if (note) {
-          // Get decimal part without decimal error so protect binary
-          // 8 bits (high bits) for duration
-          // 7 bits (low bits for backwards compatibility) for attenuation.
+          // Get decimal part without decimal error to protect binary.
+          // 8 bits (high bits) for duration (0-255)
+          // 7 bits (low bits for backwards compatibility) for attenuation (0-127).
           int = (note + '').split('.')[1]*1;
           duration = int >> 7;
           // set attenuation
